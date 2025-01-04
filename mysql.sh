@@ -40,14 +40,14 @@ echo "Script stat=rted executing at $TIMIESTAMP" &>>$LOG_FILE_NAME
 
 CHECKROOT
 
-dnf install mysql-server -y &&>>$LOG_FILE_NAME
+dnf install mysql-server -y &>>$LOG_FILE_NAME
 VALIDATE $? "my-sql server installing..." 
 
-systemctl enable mysqld &&>>$LOG_FILE_NAME
+systemctl enable mysqld &>>$LOG_FILE_NAME
 VALIDATE $? "Enabling mysql server..."
 
-systemctl start mysqld &&>>$LOG_FILE_NAME
+systemctl start mysqld &>>$LOG_FILE_NAME
 VALIDATE $? "Starting mysql server..."
 
-mysql_secure_installation --set-root-pass ExpenseApp@1 &&>>$LOG_FILE_NAME
+mysql_secure_installation --set-root-pass ExpenseApp@1 &>>$LOG_FILE_NAME
 VALIDATE $? "Setting Root Password..."
