@@ -61,7 +61,7 @@ VALIDATE $? "Unzip the downloaded zip App"
 npm install &>>$LOG_FILE_NAME
 VALIDATE $? "Installing dependencies"
 
-cp home/ec2-user/expense-shell/backend.service /etc/systemd/system/backend.service 
+cp /home/ec2-user/expense-shell/backend.service /etc/systemd/system/backend.service 
 
 # Preparing mysql schemas
 
