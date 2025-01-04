@@ -40,7 +40,7 @@ echo "Script stat=rted executing at $TIMIESTAMP" &>>$LOG_FILE_NAME
 
 CHECKROOT
 
-dnf install mysql-serve -y &&>>$LOG_FILE_NAME
+dnf install mysql-server -y &&>>$LOG_FILE_NAME
 VALIDATE $? "my-sql server installing..." 
 
 systemctl enable mysqld &&>>$LOG_FILE_NAME
