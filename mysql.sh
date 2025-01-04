@@ -1,53 +1,46 @@
 #!/bin/bash
 
-
-USERID=$(id -u) # Here we fetches the user id of the current user if sudo then it is '0' else any other number
-
+USERID=$(id -u)
 R="\e[31m"
 G="\e[32m"
 Y="\e[33m"
 N="\e[0m"
+
 LOGS_FOLDER="/var/log/shell-mysql-logs"
 LOG_FILE=$(echo $0 | cut -d "." -f1 )
-TIMIESTAMP=$(date +%Y-%m-%d-%H-%M-%S) # yyyy/mm/dd/HRS/MIN/SEC
-LOG_FILE_NAME="$LOGS_FOLDER/$LOG_FILE-$TIMIESTAMP.log" # this is the folder name follwed by logfile with timestamp
+TIMESTAMP=$(date +%Y-%m-%d-%H-%M-%S)
+LOG_FILE_NAME="$LOGS_FOLDER/$LOG_FILE-$TIMESTAMP.log"
 
-# Valicdation function for success or faliure message
-VALIDATE()
-{
+VALIDATE(){
     if [ $1 -ne 0 ]
-    then 
-       echo -e "$2 INSTALLATION....$R IS FAILURE $N"
-       exit 1 # After executing the above statement return with exit status as 1 other than 0  which is "failure"
-    else 
-       echo -e "$2 INSTALLATION IS $G SUCCESS $N"
-    fi # End of If
-}
-
-
-CHECKROOT(){
-
-
-   if [ $USERID -ne 0 ]
     then
-            echo "ERROR:: you must have sudo access to execute this script"
-            exit 1 # if ther than 0
+        echo -e "$2 ... $R FAILURE $N"
+        exit 1
+    else
+        echo -e "$2 ... $G SUCCESS $N"
     fi
-
 }
 
-echo "Script stat=rted executing at $TIMIESTAMP" &>>$LOG_FILE_NAME
+CHECK_ROOT(){
+    if [ $USERID -ne 0 ]
+    then
+        echo "ERROR:: You must have sudo access to execute this script"
+        exit 1 #other than 0
+    fi
+}
 
-CHECKROOT
+echo "Script started executing at: $TIMESTAMP" &>>$LOG_FILE_NAME
+
+CHECK_ROOT
 
 dnf install mysql-server -y &>>$LOG_FILE_NAME
-VALIDATE $? "my-sql server installing..." 
+VALIDATE $? "Installing MySQL Server"
 
 systemctl enable mysqld &>>$LOG_FILE_NAME
-VALIDATE $? "Enabling mysql server..."
+VALIDATE $? "Enabling MySQL Server"
 
 systemctl start mysqld &>>$LOG_FILE_NAME
-VALIDATE $? "Starting mysql server..."
+VALIDATE $? "Starting MySQL Server"
 
 mysql -h mysql.daws82s.online -u root -pExpenseApp@1 -e 'show databases;' &>>$LOG_FILE_NAME
 
